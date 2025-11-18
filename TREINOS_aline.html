@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Planejamento de Corridas – Aline (Nov/Dez)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg-main: #020617;
+      --bg-elevated: #020617;
+      --bg-card: #020617;
+      --bg-card-soft: #020617;
+      --bg-soft: #0b1120;
+      --border-soft: #1f2937;
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.15);
+      --danger: #f97316;
+      --danger-soft: rgba(248, 113, 113, 0.16);
+      --text-main: #e5e7eb;
+      --text-soft: #9ca3af;
+      --text-muted: #6b7280;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 40%, #000 100%);
+      color: var(--text-main);
+    }
+
+    .app {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .title-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #22c55e, #0f766e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin: 0;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    h1 span.small {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-soft);
+    }
+
+    header p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-soft);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: rgba(15, 23, 42, 0.9);
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      margin-top: 8px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    /* Cards base */
+    .card {
+      background: rgba(15, 23, 42, 0.97);
+      border-radius: 16px;
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 12px;
+    }
+
+    /* Treino de hoje / próximo */
+    #today-card {
+      margin-bottom: 12px;
+    }
+
+    .today-card-inner {
+      border-radius: 16px;
+      border: 1px solid var(--accent);
+      background: linear-gradient(135deg, #022c22, #020617);
+      padding: 12px 12px 10px;
+      box-shadow: 0 0 24px rgba(34, 197, 94, 0.38);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .today-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .today-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .today-badge {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: var(--text-soft);
+      white-space: nowrap;
+    }
+
+    .today-main {
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .today-main strong {
+      font-weight: 600;
+    }
+
+    .today-paces {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      margin-top: 2px;
+    }
+
+    .today-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      color: var(--text-soft);
+    }
+
+    /* Resumo rápido */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .summary-box {
+      background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.18), #020617);
+      border-radius: 12px;
+      padding: 8px 10px;
+      border: 1px solid var(--border-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .summary-box h3 {
+      margin: 0;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-soft);
+    }
+
+    .summary-value {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .summary-helper {
+      font-size: 0.72rem;
+      color: var(--text-soft);
+    }
+
+    .legend {
+      border-top: 1px dashed var(--border-soft);
+      padding-top: 8px;
+      margin-top: 4px;
+      font-size: 0.72rem;
+      color: var(--text-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+
+    .dot-red {
+      background: #b91c1c;
+    }
+
+    .dot-green {
+      background: #16a34a;
+    }
+
+    /* Main / tabela */
+    .toolbar {
+      margin-bottom: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .toolbar-input {
+      flex: 1 1 180px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    .toolbar-input input {
+      border: none;
+      outline: none;
+      background: transparent;
+      flex: 1;
+      color: var(--text-main);
+      font-size: 0.8rem;
+    }
+
+    .toolbar-pill {
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .table-wrapper {
+      background: rgba(15, 23, 42, 0.97);
+      border-radius: 16px;
+      border: 1px solid var(--border-soft);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      min-width: 720px;
+    }
+
+    thead {
+      background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.18), #020617);
+    }
+
+    th, td {
+      padding: 8px 10px;
+      text-align: left;
+      border-bottom: 1px solid #020617;
+    }
+
+    th {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-soft);
+      white-space: nowrap;
+    }
+
+    tbody tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.96);
+    }
+
+    tbody tr:nth-child(odd) {
+      background: rgba(2, 6, 23, 0.96);
+    }
+
+    tbody tr:hover {
+      background: rgba(30, 64, 175, 0.3);
+    }
+
+    .col-date {
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .type-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      font-size: 0.78rem;
+    }
+
+    .type-pill span.icon {
+      font-size: 0.85rem;
+    }
+
+    .pace-muted {
+      color: var(--text-soft);
+    }
+
+    .today-row {
+      outline: 1px solid rgba(34, 197, 94, 0.7);
+      outline-offset: -1px;
+    }
+
+    .chip-input {
+      width: 70px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-main);
+      font-size: 0.78rem;
+      text-align: center;
+      outline: none;
+    }
+
+    .chip-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .chip-empty {
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .chip-below {
+      background: #450a0a;
+      border-color: #b91c1c;
+      color: #fecaca;
+    }
+
+    .chip-above {
+      background: #052e16;
+      border-color: #16a34a;
+      color: #bbf7d0;
+    }
+
+    .table-footer {
+      padding: 6px 10px;
+      font-size: 0.72rem;
+      color: var(--text-soft);
+      border-top: 1px solid var(--border-soft);
+      background: #020617;
+    }
+
+    @media (max-width: 880px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      header {
+        margin-bottom: 10px;
+      }
+      h1 {
+        font-size: 1.3rem;
+        flex-wrap: wrap;
+      }
+      .table-wrapper {
+        border-radius: 12px;
+      }
+      th, td {
+        padding: 6px 8px;
+      }
+      .chip-input {
+        width: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="title-row">
+      <div class="title-icon">17</div>
+      <div>
+        <h1>
+          Planejamento de Corridas — Aline
+          <span class="small">Nov/Dez · visual mobile-friendly</span>
+        </h1>
+        <p>Acompanhe treinos, paces e quilometragem direto no navegador (desktop ou celular).</p>
+      </div>
+    </div>
+    <div class="pill">
+      Visual pensado para corredora · até 3 corridas por semana · baseado no histórico real
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- Coluna esquerda -->
+    <div>
+      <!-- Treino de hoje / próximo -->
+      <section id="today-card"></section>
+
+      <!-- Resumo rápido -->
+      <section class="card">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+          <span style="font-size:1rem;">📊</span>
+          <span style="font-size:0.85rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;">Resumo rápido</span>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-box">
+            <h3>KM sugeridos</h3>
+            <div class="summary-value" id="km-sugeridos">0 km</div>
+            <div class="summary-helper">Somando todas as distâncias sugeridas do plano.</div>
+          </div>
+          <div class="summary-box">
+            <h3>KM ajustados</h3>
+            <div class="summary-value" id="km-ajustados">0 km</div>
+            <div class="summary-helper">Valores definidos na coluna “Dist. ajustada”.</div>
+          </div>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-box">
+            <h3>KM realizados</h3>
+            <div class="summary-value" id="km-realizados">0 km</div>
+            <div class="summary-helper">Com base na coluna “Dist. realizada (km)”.</div>
+          </div>
+          <div class="summary-box">
+            <h3>Sessões</h3>
+            <div class="summary-value" id="total-sessoes">0</div>
+            <div class="summary-helper">Total de treinos neste plano.</div>
+          </div>
+        </div>
+
+        <div class="legend">
+          <div class="legend-item">
+            <span class="dot dot-red"></span>
+            <span>Distância realizada < ajustada.</span>
+          </div>
+          <div class="legend-item">
+            <span class="dot dot-green"></span>
+            <span>Distância realizada ≥ ajustada.</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Coluna direita -->
+    <div>
+      <div class="toolbar">
+        <div class="toolbar-input">
+          🔍
+          <input id="search-input" type="text" placeholder="Buscar por data, tipo, estrutura ou pace..." />
+        </div>
+        <div class="toolbar-pill">
+          🏷️ <span id="filter-info">Todos os treinos · 0 filtrados</span>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+          <tr>
+            <th>Data</th>
+            <th>Tipo</th>
+            <th>Estrutura do treino</th>
+            <th>Pace forte</th>
+            <th>Pace leve</th>
+            <th>Dist. sugerida (km)</th>
+            <th>Dist. ajustada (km)</th>
+            <th>Dist. realizada (km)</th>
+          </tr>
+          </thead>
+          <tbody id="plan-body"></tbody>
+        </table>
+        <div class="table-footer">
+          Dica: você pode salvar este arquivo como <strong>.html</strong> no OneDrive/SharePoint ou GitHub Pages e abrir sempre
+          que quiser no celular ou computador. As distâncias realizadas ficam salvas apenas neste dispositivo (localStorage).
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* =========================
+   * Dados dos treinos da Aline
+   * ========================= */
+  const workouts = [
+    // Semana 1
+    {
+      date: "2025-11-18",
+      weekdayShort: "Ter",
+      weekdayLong: "Terça",
+      type: "Rodagem leve",
+      icon: "🧘",
+      structure: "Corrida contínua 4 km em ritmo confortável (Z2).",
+      paceFast: "—",
+      paceEasy: "7:15–8:00/km",
+      distSugerida: 4.0,
+      distAjustada: 4.0,
+      tags: ["Base", "Z2", "Emagrecimento"]
+    },
+    {
+      date: "2025-11-20",
+      weekdayShort: "Qui",
+      weekdayLong: "Quinta",
+      type: "Intervalado leve",
+      icon: "⚡",
+      structure: "1 km leve + 6x(1 min forte + 1 min leve) + 1 km leve.",
+      paceFast: "6:00–6:30/km",
+      paceEasy: "7:30–8:00/km",
+      distSugerida: 5.0,
+      distAjustada: 5.0,
+      tags: ["Velocidade", "Estímulo curto"]
+    },
+    {
+      date: "2025-11-23",
+      weekdayShort: "Dom",
+      weekdayLong: "Domingo",
+      type: "Rodagem média",
+      icon: "🏃",
+      structure: "Corrida contínua 5 km em ritmo estável.",
+      paceFast: "—",
+      paceEasy: "7:00–7:40/km",
+      distSugerida: 5.0,
+      distAjustada: 5.0,
+      tags: ["Resistência"]
+    },
+
+    // Semana 2
+    {
+      date: "2025-11-25",
+      weekdayShort: "Ter",
+      weekdayLong: "Terça",
+      type: "Rodagem leve",
+      icon: "🧘",
+      structure: "Rodagem leve 4,5 km aumentando um pouco o volume.",
+      paceFast: "—",
+      paceEasy: "7:10–7:50/km",
+      distSugerida: 4.5,
+      distAjustada: 4.5,
+      tags: ["Base", "Volume leve"]
+    },
+    {
+      date: "2025-11-27",
+      weekdayShort: "Qui",
+      weekdayLong: "Quinta",
+      type: "Intervalado progressivo",
+      icon: "⚡",
+      structure: "1 km leve + 4x(2 min forte + 2 min leve) + 1 km leve.",
+      paceFast: "6:00–6:40/km",
+      paceEasy: "7:30–8:00/km",
+      distSugerida: 5.0,
+      distAjustada: 5.0,
+      tags: ["Velocidade", "Progressivo"]
+    },
+    {
+      date: "2025-11-29",
+      weekdayShort: "Sáb",
+      weekdayLong: "Sábado",
+      type: "Longão leve",
+      icon: "🧱",
+      structure: "Longão contínuo 6 km em Z2, foco em queima de gordura.",
+      paceFast: "—",
+      paceEasy: "7:20–7:50/km",
+      distSugerida: 6.0,
+      distAjustada: 6.0,
+      tags: ["Longão", "Z2", "Emagrecimento"]
+    },
+
+    // Semana 3
+    {
+      date: "2025-12-02",
+      weekdayShort: "Ter",
+      weekdayLong: "Terça",
+      type: "Rodagem leve",
+      icon: "🧘",
+      structure: "Rodagem de soltura 4 km, bem confortável.",
+      paceFast: "—",
+      paceEasy: "7:20–8:00/km",
+      distSugerida: 4.0,
+      distAjustada: 4.0,
+      tags: ["Recuperação", "Base"]
+    },
+    {
+      date: "2025-12-04",
+      weekdayShort: "Qui",
+      weekdayLong: "Quinta",
+      type: "Intervalado curto",
+      icon: "⚡",
+      structure: "1 km leve + 8x(45s forte + 1:15 leve) + 1 km leve.",
+      paceFast: "5:45–6:15/km",
+      paceEasy: "7:30–8:00/km",
+      distSugerida: 5.0,
+      distAjustada: 5.0,
+      tags: ["Velocidade", "Qualidade"]
+    },
+    {
+      date: "2025-12-07",
+      weekdayShort: "Dom",
+      weekdayLong: "Domingo",
+      type: "Longão moderado",
+      icon: "🧱",
+      structure: "Longão 6,5 km em ritmo controlado.",
+      paceFast: "—",
+      paceEasy: "7:10–7:40/km",
+      distSugerida: 6.5,
+      distAjustada: 6.5,
+      tags: ["Resistência", "Confiança"]
+    },
+
+    // Semana 4
+    {
+      date: "2025-12-09",
+      weekdayShort: "Ter",
+      weekdayLong: "Terça",
+      type: "Rodagem recuperativa",
+      icon: "🧘",
+      structure: "Rodagem bem leve 4 km, foco em recuperar.",
+      paceFast: "—",
+      paceEasy: "7:30–8:10/km",
+      distSugerida: 4.0,
+      distAjustada: 4.0,
+      tags: ["Recuperação"]
+    },
+    {
+      date: "2025-12-11",
+      weekdayShort: "Qui",
+      weekdayLong: "Quinta",
+      type: "Intervalado controlado",
+      icon: "⚡",
+      structure: "1 km leve + 5x(2 min forte + 2 min leve) + 1 km leve.",
+      paceFast: "6:00–6:40/km",
+      paceEasy: "7:30–8:00/km",
+      distSugerida: 5.5,
+      distAjustada: 5.5,
+      tags: ["Velocidade", "Controle de ritmo"]
+    },
+    {
+      date: "2025-12-13",
+      weekdayShort: "Sáb",
+      weekdayLong: "Sábado",
+      type: "Longão leve",
+      icon: "🧱",
+      structure: "Longão 7 km em Z2, sem forçar.",
+      paceFast: "—",
+      paceEasy: "7:15–7:50/km",
+      distSugerida: 7.0,
+      distAjustada: 7.0,
+      tags: ["Longão", "Z2"]
+    },
+
+    // Semana 5
+    {
+      date: "2025-12-16",
+      weekdayShort: "Ter",
+      weekdayLong: "Terça",
+      type: "Tempo run",
+      icon: "🔥",
+      structure: "1 km leve + 2 km em ritmo firme + 1 km leve.",
+      paceFast: "6:40–7:00/km (parte central)",
+      paceEasy: "7:30–8:00/km",
+      distSugerida: 4.0,
+      distAjustada: 4.0,
+      tags: ["Ritmo", "Limiar"]
+    },
+    {
+      date: "2025-12-18",
+      weekdayShort: "Qui",
+      weekdayLong: "Quinta",
+      type: "Intervalado intenso",
+      icon: "⚡",
+      structure: "1 km leve + 10x(1 min forte + 1 min leve) + 1 km leve.",
+      paceFast: "5:50–6:20/km",
+      paceEasy: "7:30–8:00/km",
+      distSugerida: 6.0,
+      distAjustada: 6.0,
+      tags: ["Velocidade", "Qualidade alta"]
+    },
+    {
+      date: "2025-12-21",
+      weekdayShort: "Dom",
+      weekdayLong: "Domingo",
+      type: "Longão de pico",
+      icon: "🧱",
+      structure: "Longão 9,5 km em ritmo confortável (Z2).",
+      paceFast: "—",
+      paceEasy: "7:20–7:50/km",
+      distSugerida: 9.5,
+      distAjustada: 9.5,
+      tags: ["Longão de pico", "Resistência máxima"]
+    },
+
+    // Semana 6
+    {
+      date: "2025-12-23",
+      weekdayShort: "Ter",
+      weekdayLong: "Terça",
+      type: "Rodagem leve",
+      icon: "🧘",
+      structure: "Rodagem suave 4 km pós-longão.",
+      paceFast: "—",
+      paceEasy: "7:30–8:10/km",
+      distSugerida: 4.0,
+      distAjustada: 4.0,
+      tags: ["Recuperação"]
+    },
+    {
+      date: "2025-12-27",
+      weekdayShort: "Sáb",
+      weekdayLong: "Sábado",
+      type: "Intervalado leve",
+      icon: "⚡",
+      structure: "1 km leve + 6x(1 min forte + 1 min leve) + 1 km leve.",
+      paceFast: "6:00–6:30/km",
+      paceEasy: "7:30–8:00/km",
+      distSugerida: 5.0,
+      distAjustada: 5.0,
+      tags: ["Velocidade", "Manutenção"]
+    },
+    {
+      date: "2025-12-30",
+      weekdayShort: "Ter",
+      weekdayLong: "Terça",
+      type: "Corrida de encerramento",
+      icon: "🎉",
+      structure: "Corrida contínua 6 km confortável, últimos 500 m mais fortes.",
+      paceFast: "Um pouco mais forte nos 500 m finais",
+      paceEasy: "7:10–7:50/km",
+      distSugerida: 6.0,
+      distAjustada: 6.0,
+      tags: ["Encerramento", "Confiança"]
+    }
+  ];
+
+  /* =========================
+   * Helpers de datas e format
+   * ========================= */
+  const pad2 = (n) => n.toString().padStart(2, "0");
+  function getTodayISO() {
+    const d = new Date();
+    return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+  }
+  function formatDateBr(iso) {
+    const [y, m, d] = iso.split("-");
+    return `${d}/${m}/${y}`;
+  }
+  function formatKm(value) {
+    return `${value.toFixed(1).replace(".", ",")} km`;
+  }
+
+  /* =========================
+   * Estado (localStorage)
+   * ========================= */
+  const STORAGE_KEY = "aline_treinos_realizados_v1";
+  let realizedState = {};
+  const inputRefs = {};
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      return typeof parsed === "object" && parsed !== null ? parsed : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(realizedState));
+    } catch {
+      // ignore
+    }
+  }
+
+  /* =========================
+   * Treino de hoje / próximo
+   * ========================= */
+  function getTodayOrNextWorkout() {
+    const today = getTodayISO();
+    // 1) procura treino de hoje
+    const todayW = workouts.find((w) => w.date === today);
+    if (todayW) return { workout: todayW, isToday: true };
+
+    // 2) próximo treino futuro
+    const future = workouts
+      .filter((w) => w.date > today)
+      .sort((a, b) => a.date.localeCompare(b.date));
+    if (future.length > 0) return { workout: future[0], isToday: false };
+
+    return null;
+  }
+
+  function renderTodayCard() {
+    const container = document.getElementById("today-card");
+    const data = getTodayOrNextWorkout();
+    container.innerHTML = "";
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "card";
+    wrapper.id = "today-card-wrapper";
+
+    const titleBar = document.createElement("div");
+    titleBar.style.display = "flex";
+    titleBar.style.alignItems = "center";
+    titleBar.style.gap = "6px";
+    titleBar.style.marginBottom = "6px";
+    titleBar.innerHTML =
+      '<span style="font-size:1rem;">📅</span>' +
+      '<span style="font-size:0.85rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;">Treino de hoje / próximo</span>';
+
+    wrapper.appendChild(titleBar);
+
+    const inner = document.createElement("div");
+    inner.className = "today-card-inner";
+
+    if (!data) {
+      inner.innerHTML =
+        '<div class="today-main">Nenhum treino restante no calendário. Aproveite para descanso ativo, caminhada leve ou alongamentos.</div>';
+      wrapper.appendChild(inner);
+      container.appendChild(wrapper);
+      return;
+    }
+
+    const { workout: w, isToday } = data;
+
+    const header = document.createElement("div");
+    header.className = "today-header";
+
+    const title = document.createElement("div");
+    title.className = "today-title";
+    title.innerHTML = `${w.icon} ${isToday ? "Treino de hoje" : "Próximo treino"}`;
+
+    const badge = document.createElement("div");
+    badge.className = "today-badge";
+    badge.textContent = `${w.weekdayLong}, ${formatDateBr(w.date)}`;
+
+    header.appendChild(title);
+    header.appendChild(badge);
+
+    const main = document.createElement("div");
+    main.className = "today-main";
+
+    const line1 = document.createElement("div");
+    line1.innerHTML = `<strong>${w.type}</strong> · ${w.distSugerida
+      .toFixed(1)
+      .replace(".", ",")} km`;
+
+    const line2 = document.createElement("div");
+    line2.textContent = w.structure;
+
+    main.appendChild(line1);
+    main.appendChild(line2);
+
+    const paces = document.createElement("div");
+    paces.className = "today-paces";
+    let text = "";
+    if (w.paceEasy) text += `<strong>Pace leve:</strong> ${w.paceEasy}`;
+    if (w.paceFast && w.paceFast !== "—") {
+      if (text) text += " · ";
+      text += `<strong>Pace forte:</strong> ${w.paceFast}`;
+    }
+    paces.innerHTML = text;
+
+    const tags = document.createElement("div");
+    tags.className = "today-tags";
+    (w.tags || []).forEach((t) => {
+      const tag = document.createElement("div");
+      tag.className = "tag";
+      tag.textContent = t;
+      tags.appendChild(tag);
+    });
+
+    inner.appendChild(header);
+    inner.appendChild(main);
+    if (text) inner.appendChild(paces);
+    if (w.tags && w.tags.length) inner.appendChild(tags);
+
+    wrapper.appendChild(inner);
+    container.appendChild(wrapper);
+  }
+
+  /* =========================
+   * Render da tabela
+   * ========================= */
+  function renderTable() {
+    const tbody = document.getElementById("plan-body");
+    tbody.innerHTML = "";
+    const todayISO = getTodayISO();
+
+    workouts.forEach((w) => {
+      const tr = document.createElement("tr");
+
+      const searchText = [
+        w.weekdayShort,
+        w.weekdayLong,
+        formatDateBr(w.date),
+        w.type,
+        w.structure,
+        w.paceFast,
+        w.paceEasy
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      tr.dataset.search = searchText;
+
+      if (w.date === todayISO) {
+        tr.classList.add("today-row");
+      }
+
+      // Data
+      const tdDate = document.createElement("td");
+      tdDate.className = "col-date";
+      tdDate.textContent = `${w.weekdayShort} (${formatDateBr(w.date)})`;
+      tr.appendChild(tdDate);
+
+      // Tipo
+      const tdType = document.createElement("td");
+      const typePill = document.createElement("span");
+      typePill.className = "type-pill";
+      typePill.innerHTML = `<span class="icon">${w.icon}</span>${w.type}`;
+      tdType.appendChild(typePill);
+      tr.appendChild(tdType);
+
+      // Estrutura
+      const tdStruct = document.createElement("td");
+      tdStruct.textContent = w.structure;
+      tr.appendChild(tdStruct);
+
+      // Pace forte
+      const tdPaceF = document.createElement("td");
+      tdPaceF.className = "pace-muted";
+      tdPaceF.textContent = w.paceFast || "—";
+      tr.appendChild(tdPaceF);
+
+      // Pace leve
+      const tdPaceL = document.createElement("td");
+      tdPaceL.className = "pace-muted";
+      tdPaceL.textContent = w.paceEasy || "—";
+      tr.appendChild(tdPaceL);
+
+      // Dist sugerida
+      const tdSug = document.createElement("td");
+      tdSug.textContent = w.distSugerida.toFixed(1).replace(".", ",");
+      tr.appendChild(tdSug);
+
+      // Dist ajustada
+      const tdAdj = document.createElement("td");
+      tdAdj.textContent = w.distAjustada.toFixed(1).replace(".", ",");
+      tr.appendChild(tdAdj);
+
+      // Dist realizada (input)
+      const tdReal = document.createElement("td");
+      const input = document.createElement("input");
+      input.type = "text";
+      input.placeholder = "--";
+      input.className = "chip-input chip-empty";
+      const existing = realizedState[w.date];
+      if (existing !== undefined && existing !== null && existing !== "") {
+        input.value = existing;
+      }
+      input.addEventListener("input", () => {
+        const raw = input.value.trim();
+        if (!raw) {
+          delete realizedState[w.date];
+        } else {
+          // aceita vírgula ou ponto
+          realizedState[w.date] = raw;
+        }
+        saveState();
+        updateSummaryAndStyles();
+      });
+
+      tdReal.appendChild(input);
+      tr.appendChild(tdReal);
+
+      inputRefs[w.date] = input;
+      tbody.appendChild(tr);
+    });
+  }
+
+  /* =========================
+   * Resumo & estilos dos inputs
+   * ========================= */
+  function updateSummaryAndStyles() {
+    let kmSug = 0;
+    let kmAdj = 0;
+    let kmReal = 0;
+
+    workouts.forEach((w) => {
+      kmSug += w.distSugerida;
+      kmAdj += w.distAjustada;
+
+      const raw = realizedState[w.date];
+      const input = inputRefs[w.date];
+      if (input) {
+        input.classList.remove("chip-below", "chip-above", "chip-empty");
+      }
+      if (!raw || raw.toString().trim() === "") {
+        if (input) input.classList.add("chip-empty");
+        return;
+      }
+
+      const normalized = raw.toString().replace(",", ".");
+      const v = parseFloat(normalized);
+      if (isNaN(v) || v <= 0) {
+        if (input) input.classList.add("chip-empty");
+        return;
+      }
+
+      kmReal += v;
+
+      if (input) {
+        if (v < w.distAjustada - 0.01) {
+          input.classList.add("chip-below");
+        } else {
+          input.classList.add("chip-above");
+        }
+      }
+    });
+
+    document.getElementById("km-sugeridos").textContent = formatKm(kmSug);
+    document.getElementById("km-ajustados").textContent = formatKm(kmAdj);
+    document.getElementById("km-realizados").textContent = formatKm(kmReal);
+    document.getElementById("total-sessoes").textContent = workouts.length.toString();
+
+    updateFilterInfo();
+  }
+
+  /* =========================
+   * Filtro simples por texto
+   * ========================= */
+  function updateFilterInfo() {
+    const tbody = document.getElementById("plan-body");
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+    const total = rows.length;
+    const visible = rows.filter((r) => r.style.display !== "none").length;
+    document.getElementById("filter-info").textContent =
+      visible === total ? `Todos os treinos · ${total} sessões` : `${visible} de ${total} treinos visíveis`;
+  }
+
+  function setupSearch() {
+    const input = document.getElementById("search-input");
+    input.addEventListener("input", () => {
+      const q = input.value.trim().toLowerCase();
+      const tbody = document.getElementById("plan-body");
+      const rows = Array.from(tbody.querySelectorAll("tr"));
+      rows.forEach((tr) => {
+        const base = tr.dataset.search || "";
+        tr.style.display = base.includes(q) ? "" : "none";
+      });
+      updateFilterInfo();
+    });
+  }
+
+  /* =========================
+   * Init
+   * ========================= */
+  (function init() {
+    realizedState = loadState();
+    renderTodayCard();
+    renderTable();
+    setupSearch();
+    updateSummaryAndStyles();
+  })();
+</script>
+</body>
+</html>
